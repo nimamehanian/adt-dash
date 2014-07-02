@@ -1,0 +1,120 @@
+.chart {
+  background-color: #fff;
+  cursor: default !important;
+  height: 26rem;
+  max-height: 26rem;
+  width: 100%;
+  font-weight: 300;
+  margin-top: 1rem;
+}
+
+.chart .ctr-axis path,
+.chart .ctr-axis .tick {
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+}
+
+.time-axis path, .time-axis line {
+  fill: none;
+  stroke: #c0d0e0;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.pseudo-axis {
+  fill: none;
+  stroke: #c0d0e0;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  opacity: 0.5;
+}
+
+.time-axis text {
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+}
+
+.ctr-axis path, .ctr-axis line {
+  fill: none;
+  stroke: #c0d0e0;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.ctr-line {
+  stroke: $rose;
+  stroke-width: 2;
+  fill: none;
+}
+
+.imp-line {
+  stroke: $emerald;
+  stroke-width: 2;
+  fill: none;
+}
+
+.pacing-line {
+  stroke: $sky;
+  stroke-width: 2;
+  stroke-dasharray: 3, 10;
+  fill: none;
+}
+
+.ctr-dot,
+.pacing-dot {
+  fill: $emerald;
+  stroke: #fff;
+  stroke-width: 2;
+  padding: 2rem;
+}
+
+.chart-popover {
+  background-color: #fff;
+  border: 0.1rem solid #ccc;
+  border-radius: 0.3rem;
+  color: #383e4b;
+  font-size: 1.2rem;
+  height: 8rem;
+  letter-spacing: 0.1rem;
+  opacity: 0;
+  position: absolute;
+  text-align: left;
+  top: 420px;
+  width: 19rem;
+  transition: opacity 0.2s ease;
+  transition: top 0.2s ease;
+}
+
+.chart-popover-title {
+  background-color: #f7f7f7;
+  border-bottom: 0.1rem solid #ebebeb;
+  overflow: hidden;
+  padding: 0.5rem 0;
+  font-style: bold;
+  width: 100%;
+}
+
+.chart-popover-warning {
+  color: #f7f7f7;
+  background-color: #d9a234;
+  /*background-color: $carotene;*/
+  border-bottom: 0.1rem solid #ebebeb;
+  overflow: hidden;
+  width: 100%;
+}
+
+.chart-popover-contents {
+  padding: 0.5rem;
+  line-height: 1.6;
+}
+
+.imp-bar {
+  fill: $emerald;
+}
+
+.imp-axis path, .imp-axis line {
+  fill: none;
+  stroke: #f00;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}

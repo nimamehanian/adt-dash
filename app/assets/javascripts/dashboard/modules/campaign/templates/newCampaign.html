@@ -1,0 +1,103 @@
+<!-- Breadcrumbs -->
+<ul class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/campaigns">Campaigns</a></li>
+  <li><a href="/campaigns/new">New</a></li>
+</ul>
+
+<div class="widget">
+  <legend>
+    <i class="icon-dashboard"></i>
+    Begin Campaign
+  </legend>
+  <div class="widget-contents">
+    <form role="form" ng-submit="submit(campaign)">
+      <div class="even-spread-container between-rows">
+        <!-- Name -->
+        <input type="text" name="name" class="form-control even-spread-thirds" placeholder="Campaign name"
+          tabindex="1"
+          ng-minlength="3"
+          ng-model="campaign.name"
+          required
+        />
+
+        <!-- Date Range -->
+        <input type="text"
+          class="form-control even-spread-thirds"
+          placeholder="Start Date"
+          tabindex="2"
+          datepicker-popup="EEEE, dd MMMM yyyy"
+          show-weeks="false"
+          min="today"
+          name="start_date"
+          ng-model="campaign.start_date"
+          calendar-popup
+        />
+        <input type="text"
+          class="form-control even-spread-thirds"
+          placeholder="End Date"
+          tabindex="3"
+          datepicker-popup="EEEE, dd MMMM yyyy"
+          show-weeks="false"
+          name="end_date"
+          ng-model="campaign.end_date"
+          calendar-popup
+        />
+      </div>
+
+      <div class="even-spread-container">
+        <!-- Advertiser -->
+        <button type="button" id="select-adv" class="btn btn-default even-spread-quarters"
+          data-html="1"
+          tabindex="4"
+          bs-select
+          ng-required
+          ng-model="campaign.advertiser_id"
+          data-animation="animation-flipX"
+          ng-options="advertiser.id as advertiser.name for advertiser in advertisers"
+          placeholder="Choose an advertiser"
+          > Action <span class="caret"></span>
+        </button>
+
+        <!-- Dollar Budget -->
+        <input type="number" name="dollar_budget"
+          class="form-control even-spread-quarters"
+          placeholder="Dollar Budget"
+          tabindex="5"
+          min="100"
+          ng-minlength="3"
+          ng-model="campaign.dollar_budget"
+          required
+        />
+
+        <!-- Impression Budget -->
+        <input type="number" name="imp_budget"
+          class="form-control even-spread-quarters"
+          placeholder="Impression Budget"
+          tabindex="6"
+          min="1"
+          ng-minlength="1"
+          ng-maxlength="9"
+          ng-model="campaign.imp_budget"
+          required
+        />
+
+        <!-- Pacing Type -->
+        <button type="button"
+          class="btn btn-default even-spread-quarters"
+          placeholder="Pacing Type"
+          tabindex="7" data-html="1"
+          ng-model="campaign.pacing_type"
+          ng-options="pacingType.value as pacingType.name for pacingType in pacingTypes"
+          data-animation="animation-flipX"
+          bs-select
+          required
+          > Action <span class="caret"></span>
+        </button>
+      </div>
+      <br /><br />
+      <a href="/campaigns" tabindex="8" class="btn btn-default">Cancel</a>
+      <button type="submit" tabindex="9" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>

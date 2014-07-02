@@ -1,0 +1,17 @@
+.sparkline-chart {
+  max-height: 2.9rem;
+  max-width: 15rem;
+  position: relative;
+  top: 0.2rem;
+}
+
+.sparkline {
+  stroke: #3c90d6;
+  stroke-width: 1.6px;
+  fill: none;
+}
+
+td.sparkline {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}

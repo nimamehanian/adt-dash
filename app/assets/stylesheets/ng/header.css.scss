@@ -1,0 +1,75 @@
+#header li {
+  cursor: pointer;
+  display: inline;
+  font-size: 1.6rem;
+  letter-spacing: 0.2rem;
+  line-height: 3;
+  padding: 1.4rem 0.4rem 1.7rem 0.4rem;
+  text-align: center;
+}
+
+#header li:hover {background-color: $sky;}
+
+#header a {color: #f8f8f8; margin-left: 0rem;}
+
+a#campaigns {
+  padding: 1.5rem 0 1.8rem;
+  position: relative;
+  left: 0.5rem;
+}
+
+a#library {
+  padding: 1.5rem 0 1.8rem;
+  position: relative;
+  left: 0.4rem;
+}
+
+a#analytics {
+  padding: 1.5rem 0.8rem 1.8rem 0.8rem;
+}
+
+#campaigns span {
+  padding-left: 0.4rem;
+  padding-right: 0.6rem;
+}
+
+#library span {
+  padding-left: 0.8rem;
+  padding-right: 0.9rem;
+}
+
+#analytics span {
+  padding-left: 0.4rem;
+}
+
+#settings {
+  color: #f8f8f8;
+  cursor: pointer;
+  float: right;
+  text-align: center;
+  padding: 1.3rem 1.2rem 1.2rem;
+  margin-right: 0;
+}
+
+#settings:hover  {background-color: #1864a5;}
+
+@media (max-width: 355px) {
+  #settings {display: none !important;}
+  .header-name {display: none !important;}
+  a#campaigns {padding: 1.5rem 0.2rem 1.8rem 0rem;}
+  a#analytics {padding: 1.5rem 0.1rem 1.8rem 0.3rem;}
+}
+
+@media (min-width: 356px) and (max-width: 579px) {
+  #settings {display: inline;}
+  #header i {display: inline !important;}
+  .header-name {display: none;}
+  a#campaigns {padding: 1.5rem 0.2rem 1.8rem 0rem;}
+  a#analytics {padding: 1.5rem 0.1rem 1.8rem 0.3rem;}
+}
+
+@media (min-width: 580px) {
+  #settings {display: inline !important;}
+  #header i {display: none;}
+  .header-name {display: inline;}
+}

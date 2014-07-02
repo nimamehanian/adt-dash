@@ -1,0 +1,628 @@
+<!-- Breadcrumbs -->
+<ul class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/campaigns">Campaigns</a></li>
+  <li><a href="/campaigns/{{ lineItem.campaign.id }}">{{ lineItem.campaign.name }}</a></li>
+  <li><a href="/line-items/{{ lineItem.id }}">{{ lineItem.name }}</a></li>
+</ul>
+
+<!-- Statboxes -->
+<div class="even-spread-container">
+  <div class="statbox even-spread-sixths">
+    <div class="statbox-title opacity-80">Clicks</div>
+    <div class="statbox-figures"></div>
+    {{ lineItem.clicks | commaSeparate }}
+  </div>
+
+  <div class="statbox even-spread-sixths">
+    <div class="statbox-title opacity-80">Impressions Served</div>
+    <div class="statbox-figures"></div>
+    {{ lineItem.imps | commaSeparate }}
+  </div>
+
+  <div class="statbox even-spread-sixths">
+    <div class="statbox-title opacity-80">CTR</div>
+    <div class="statbox-figures"></div>
+    {{ lineItem.ctr }}
+  </div>
+  <div class="statbox even-spread-sixths">
+    <div class="statbox-title opacity-80">Daily Impression Budget</div>
+    <div class="statbox-figures"></div>
+    {{ lineItem.daily_impression_budget | commaSeparate }}
+  </div>
+  <div class="statbox even-spread-sixths">
+    <div class="statbox-title opacity-80">Spend</div>
+    <div class="statbox-figures"></div>
+    N/A
+  </div>
+</div>
+
+<!-- Performance Charts -->
+<div class="even-spread-container">
+  <div class="widget" style="width: 75%;">
+    <legend><i class="icon-random icon-random-margin-right"></i>Performance</legend>
+    <div class="widget-contents">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default btn-sm" ng-model="shownChart" btn-radio="'CTR'">CTR</button>
+        <button type="button" class="btn btn-default btn-sm" ng-model="shownChart" btn-radio="'Pacing'">Pacing</button>
+      </div>
+
+      <div ng-if="shownChart === 'CTR'" impctr reporting="reporting.data"></div>
+      <div ng-if="shownChart === 'Pacing'" pacing reporting="reporting.data" line-item="lineItem"></div>
+    </div>
+  </div>
+
+  <div class="widget" style="width: 21.7%;">
+    <legend><i class="icon-mobile-phone icon-large">&nbsp;Mobile Insights</i></legend>
+    <div class="widget-contents">
+
+      <div mobile-insights ng-model="data" ng-repeat="(segment, data) in mobileInsights"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Line Item Ads Table -->
+<div class="widget widget-table" style="width: 75%;">
+  <legend>
+    <i class="icon-list"></i>
+    Creatives
+  </legend>
+  <div class="widget-contents">
+
+    <!-- Image Upload Button -->
+    <button type="button"
+      class="btn btn-default"
+      ng-click="setCurrentStep(0); comingFromStep(0);"
+      bs-modal="imageAdModal"
+    >
+      <i class="icon-picture"></i>
+      &nbsp;&nbsp; Upload Images
+    </button>
+
+
+    <button type="button"
+      class="btn btn-default"
+      ng-click="setCurrentStep(1); comingFromStep(1); clearAdFields();"
+      bs-modal="htmlAdModal">
+      <i class="icon-code"></i>
+      &nbsp;&nbsp; Upload HTML
+    </button>
+
+    <button type="button"
+      class="btn btn-default"
+      ng-click="setCurrentStep(3); comingFromStep(3)"
+      bs-modal="libraryModal">
+      <i class="icon-folder-open-alt"></i>
+      &nbsp;&nbsp; Choose from library
+    </button>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="status-col">Status</th>
+            <th class="name-col-th text-left">Name</th>
+            <th>Type</th>
+            <th>Dimensions</th>
+
+            <!-- <th class="text-left">Click URL</th> -->
+            <th>Clicks</th>
+            <th>Impressions</th>
+            <th>CTR</th>
+
+            <th class="action-col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="active toggle" ng-repeat="lineItemAd in lineItemAds">
+            <td class="status-col"><div class="orb {{ lineItemAd.status }}"></div></td>
+
+            <td class="name-col-td text-left">
+              <span class="name-span">
+                {{ lineItemAd.name }}
+              </span>
+
+              <!-- Inline name editing -->
+              <!-- <span class="name-span" adt-exempt>
+                <span
+                  ng-bind="lineItemAd.name"
+                  editable-text="lineItemAd.name"
+                  onaftersave="editName(lineItemAd)"
+                ></span>
+              </span> -->
+            </td>
+
+            <td>
+              <i class="icon-code" ng-if="lineItemAd.ad_type === 'html'"></i>
+              <i class="icon-picture" ng-if="lineItemAd.ad_type === 'image'"></i>
+            </td>
+
+            <td>{{ lineItemAd.width }} x {{ lineItemAd.height }}</td>
+
+            <td>{{ lineItemAd.clicks | commaSeparate }}</td>
+            <td>{{ lineItemAd.imps | commaSeparate }}</td>
+            <td>{{ lineItemAd.ctr }}</td>
+
+            <!-- <td class="text-left">
+              <span ng-if="!lineItemAd.click_url">Not specified</span>
+              {{ lineItemAd.click_url }}
+            </td> -->
+
+            <td class="action-col">
+              <i class="icon-eye-open icon-large action-button preview" ng-class="{'i-disabled': lineItemAd.ad_type === 'html'}" ng-click="preview(lineItemAd)" bs-modal="previewAd"></i>
+              <i class="icon-pencil icon-large action-button edit" ng-click="edit(lineItemAd)" bs-modal="editAd"></i>
+
+                <!-- confirm-delete -->
+              <i
+                class="icon-trash icon-large action-button remove"
+                confirm-delete
+                keep="keep()"
+
+              ></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- closes .table-responsive -->
+  </div><!-- closes .widget-contents -->
+</div><!-- closes .widget -->
+
+<!-- Ad Upload template -->
+<script type="text/ng-template" id="uploadAdsModal.tpl.html">
+  <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header" ng-show="title">
+          <button type="button" class="close" ng-click="$hide()">&times;</button>
+          <h4 class="modal-title">{{ getTitle() }}</h4>
+        </div>
+
+        <div class="modal-body">
+          <div ng-switch="getCurrentStepName()">
+
+            <!-- // UPLOAD HTML AD -->
+            <!-- // UPLOAD HTML AD -->
+            <!-- // UPLOAD HTML AD -->
+            <div ng-switch-when="uploadHTML">
+              <form role="form" class="ad-upload-form">
+                <div class="even-spread-container between-rows">
+                  <input type="text"
+                    name="name"
+                    ng-model="htmlAd.name"
+                    ng-minlength="3"
+                    class="form-control even-spread-quarters"
+                    placeholder="Creative name"
+                    required />
+
+                  <input type="number" name="width"
+                    ng-model="htmlAd.width"
+                    class="form-control even-spread-quarters"
+                    placeholder="Width"
+                    min="1"
+                    required />
+
+                  <input type="number" name="height"
+                    ng-model="htmlAd.height"
+                    class="form-control even-spread-quarters"
+                    placeholder="Height"
+                    min="1"
+                    required />
+
+                  <button type="button" id="select-adv"
+                    placeholder="Advertiser"
+                    class="btn btn-default html-ad even-spread-quarters"
+                    data-html="1"
+                    data-animation="animation-flipX"
+                    ng-model="htmlAd.advertiser_id"
+                    ng-options="advertiser.id as advertiser.name for advertiser in advertisers"
+                    ng-required
+                    bs-select
+                    > Action <span class="caret"></span>
+                  </button>
+
+                </div>
+                <textarea id="html-ad" name="ad_tag"
+                  ng-model="htmlAd.ad_tag"
+                  class="form-control"
+                  placeholder="Paste HTML ad, here."
+                  required />
+                </textarea>
+
+                <br />
+
+                <button
+                  type="button"
+                  class="btn btn-default btn-xs"
+                  ng-class="{'btn-primary': htmlAd.mraid}"
+                  ng-model="htmlAd.mraid"
+                  btn-checkbox
+                  btn-checkbox-true="true"
+                  btn-checkbox-false="false">
+                    MRAID
+                </button>
+
+              </form>
+            </div>
+
+
+            <!-- // UPLOAD IMAGES -->
+            <!-- // UPLOAD IMAGES -->
+            <!-- // UPLOAD IMAGES -->
+            <div ng-switch-when="uploadImages">
+              <form role="form" class="ad-upload-form">
+                <div style="text-align: center;">
+
+                  <button type="button" id="select-adv"
+                    placeholder="Select an advertiser"
+                    class="btn btn-default image-ad"
+                    data-html="1"
+                    data-animation="animation-flipX"
+                    ng-model="imageAd.advertiser_id"
+                    ng-options="advertiser.id as advertiser.name for advertiser in advertisers"
+                    ng-required
+                    bs-select>
+                      Action <span class="caret"></span>
+                  </button>
+
+                  <div class="upload-container btn-info">
+                    <input type="file" ng-file-select="onFileSelect($files)" />
+                  </div>
+
+                  <br />
+
+                  <progressbar
+                    ng-if="showBar"
+                    type="info"
+                    value="100"
+                    class="progress-striped active">
+                  </progressbar>
+                </div>
+              </form>
+            </div>
+
+            <!-- // NEW LINE ITEM AD FORM -->
+            <!-- // NEW LINE ITEM AD FORM -->
+            <!-- // NEW LINE ITEM AD FORM -->
+            <div ng-switch-when="lineItemAdForm">
+              <form role="form" class="line-item-ad-form">
+
+                <input type="text" name="name"
+                  class="form-control between-rows"
+                  placeholder="Line Item Ad Name"
+                  ng-minlength="3"
+                  ng-model="lineItemAd.name" />
+
+
+
+                <div ng-if="lineItemAd.ad_type === 'image'">
+                  <div class="btn-group" ng-model="urlType" bs-radio-group>
+                    <label
+                      class="btn btn-xs btn-default">
+                      <input type="radio" class="btn btn-default" value="click_url" />
+                      <span class="rotation-title">Click URL</span>
+                    </label>
+
+                    <label
+                      class="btn btn-xs btn-default between-rows">
+                      <input type="radio" class="btn btn-default" value="click_tracking_url" />
+                      <span class="rotation-title">Click Tracking URL</span>
+                    </label>
+                  </div><!-- // btn-group -->
+
+
+                  <div ng-if="urlType === 'click_url' || lineItemAd.click_url" ng-hide="urlType === 'click_tracking_url'">
+                    <input type="text" name="click_url"
+                      class="form-control"
+                      placeholder="Click URL"
+                      ng-model="lineItemAd.click_url" />
+                  </div>
+
+                  <div ng-if="urlType === 'click_tracking_url' || lineItemAd.click_tracking_url" ng-hide="urlType === 'click_url'">
+                    <input type="text" name="click_tracking_url"
+                      class="form-control"
+                      placeholder="Click Tracking URL"
+                      ng-model="lineItemAd.click_tracking_url" />
+                  </div>
+                </div>
+
+
+
+                <!--
+                <div class="input-group">
+                  <input type="text" name="impression_tracking_pixels"
+                    class="form-control"
+                    placeholder="Impression Tracking Pixels"
+                    push-itp
+                    ng-model="itp"
+                    ng-options="itp for itp in itps"
+                    bs-typeahead />
+
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      <i class="icon-angle-down"></i>
+                    </button>
+
+                    <ul class="itp-dropdown dropdown-menu pull-right">
+                      <li ng-if="!lineItemAd.impression_tracking_pixels.length" class="no-select">
+                        <a href="#" class="text-center">No set Impression Tracking Pixels</a>
+                      </li>
+
+                      <li ng-if="lineItemAd.impression_tracking_pixels.length" class="no-select">
+                        <a href="#" class="text-center">-- Current Impression Tracking Pixels --</a>
+                      </li>
+
+                      <li ng-if="lineItemAd.impression_tracking_pixels.length" class="no-select">
+                        <a href="" class="text-center">
+                          <small>(click to remove)</small>
+                        </a>
+                      </li>
+
+                      <li ng-if="lineItemAd.impression_tracking_pixels.length" class="divider"></li>
+
+                      <li class="toggle" ng-repeat="itp in lineItemAd.impression_tracking_pixels" ng-click="removeITP(itp)">
+                        <a href="#" class="remove-itp">
+                          {{ itp }}
+                          <i class="icon-remove opacity-70"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                -->
+
+
+                <textarea id="tracking-tag" name="tracking_tag"
+                  ng-model="lineItemAd.tracking_tag"
+                  ng-if="prevStep === 0"
+                  class="form-control budge-down"
+                  placeholder="Paste tracking tag, here."
+                  wrap="off"
+                  required />
+                </textarea>
+
+
+                <div class="budge-down">
+                  <label>Rotation Type</label><br />
+                  <div class="btn-group" ng-model="lineItemAd.rotation_type" bs-radio-group>
+                    <label
+                      class="btn btn-xs btn-default">
+                      <input type="radio" class="btn btn-default" value="random" />
+                      <span class="rotation-title">Random</span>
+                    </label>
+
+                      <label
+                        class="btn btn-xs btn-default between-rows">
+                        <input type="radio" class="btn btn-default" value="weighted" />
+                        <span class="rotation-title">Weighted</span>
+                      </label>
+                  </div>
+                </div>
+
+                <div ng-if="lineItemAd.rotation_type === 'weighted'">
+                  <input type="text" name="rotation_value"
+                    class="form-control"
+                    placeholder="Rotation Weight"
+                    min="0.00" max="1.00"
+                    ng-model="lineItemAd.rotation_value" />
+                </div>
+              </form>
+            </div>
+
+            <!-- // EDIT LINE ITEM AD FORM -->
+            <!-- // EDIT LINE ITEM AD FORM -->
+            <!-- // EDIT LINE ITEM AD FORM -->
+            <div ng-switch-when="editAd">
+              <form role="form" class="line-item-ad-form">
+
+                <input
+                  type="text"
+                  name="name"
+                  class="form-control between-rows"
+                  placeholder="Line Item Ad Name"
+                  ng-minlength="3"
+                  ng-model="lineItemAd.name" />
+
+
+                <div ng-if="lineItemAd.ad_type === 'image'">
+                  <div class="btn-group" ng-model="urlType" bs-radio-group>
+                    <label
+                      class="btn btn-xs btn-default">
+                      <input type="radio" class="btn btn-default" value="click_url" />
+                      <span class="rotation-title">Click URL</span>
+                    </label>
+
+                    <label
+                      class="btn btn-xs btn-default between-rows">
+                      <input type="radio" class="btn btn-default" value="click_tracking_url" />
+                      <span class="rotation-title">Click Tracking URL</span>
+                    </label>
+                  </div><!-- // btn-group -->
+
+
+                  <div ng-if="urlType === 'click_url' || lineItemAd.click_url" ng-hide="urlType === 'click_tracking_url'">
+                    <input type="text" name="click_url"
+                      class="form-control"
+                      placeholder="Click URL"
+                      ng-model="lineItemAd.click_url" />
+                  </div>
+
+                  <div ng-if="urlType === 'click_tracking_url' || lineItemAd.click_tracking_url" ng-hide="urlType === 'click_url'">
+                    <input type="text" name="click_tracking_url"
+                      class="form-control"
+                      placeholder="Click Tracking URL"
+                      ng-model="lineItemAd.click_tracking_url" />
+                  </div>
+                </div>
+
+
+                <!--
+                <div class="input-group">
+                  <input type="text" name="impression_tracking_pixels"
+                    class="form-control"
+                    placeholder="Impression Tracking Pixels"
+                    push-itp
+                    ng-model="itp"
+                    ng-options="itp for itp in itps"
+                    bs-typeahead />
+
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                      <i class="icon-angle-down"></i>
+                    </button>
+
+                    <ul class="itp-dropdown dropdown-menu pull-right">
+                      <li ng-if="!lineItemAd.impression_tracking_pixels.length" class="no-select">
+                        <a href="#" class="text-center">No set Impression Tracking Pixels</a>
+                      </li>
+
+                      <li ng-if="lineItemAd.impression_tracking_pixels.length" class="no-select">
+                        <a href="#" class="text-center">-- Current Impression Tracking Pixels --</a>
+                      </li>
+
+                      <li ng-if="lineItemAd.impression_tracking_pixels.length" class="no-select">
+                        <a href="" class="text-center">
+                          <small>(click to remove)</small>
+                        </a>
+                      </li>
+
+                      <li ng-if="lineItemAd.impression_tracking_pixels.length" class="divider"></li>
+
+                      <li class="toggle" ng-repeat="itp in lineItemAd.impression_tracking_pixels" ng-click="removeITP(itp)">
+                        <a href="#" class="remove-itp">
+                          {{ itp }}
+                          <i class="icon-remove opacity-70"></i>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                -->
+
+                <textarea
+                  id="tracking-tag"
+                  name="tracking_tag"
+                  ng-model="lineItemAd.tracking_tag"
+                  ng-if="lineItemAd.ad_type === 'image'"
+                  class="form-control budge-down"
+                  placeholder="Paste tracking tag, here."
+                  wrap="off"
+                  required />
+                </textarea>
+
+                <textarea
+                  id="edit-html-ad"
+                  name="ad_tag"
+                  ng-model="htmlAd.ad_tag"
+                  ng-if="lineItemAd.ad_type === 'html'"
+                  class="form-control budge-down"
+                  placeholder="Paste HTML ad, here."
+                  wrap="off"
+                  required />
+                </textarea>
+
+                <div class="budge-down">
+                  <label>Rotation Type</label><br />
+                  <div class="btn-group" ng-model="lineItemAd.rotation_type" bs-radio-group>
+                    <label
+                      class="btn btn-xs btn-default">
+                      <input type="radio" class="btn btn-default" value="random" />
+                      <span class="rotation-title">Random</span>
+                    </label>
+
+                    <label
+                      class="btn btn-xs btn-default between-rows">
+                      <input type="radio" class="btn btn-default" value="weighted" />
+                      <span class="rotation-title">Weighted</span>
+                    </label>
+
+                  </div><!-- // btn-group  -->
+
+                  <div ng-if="lineItemAd.rotation_type === 'weighted'">
+                    <input type="text" name="rotation_value"
+                      class="form-control"
+                      placeholder="Rotation Weight"
+                      min="0.00" max="1.00"
+                      ng-model="lineItemAd.rotation_value" />
+                  </div>
+                </div>
+
+
+                <div ng-if="lineItemAd.ad_type === 'html'">
+                  <pre>{{ lineItemAd | json }}</pre>
+                  <br />
+                  <button
+                    type="button"
+                    class="btn btn-default btn-xs"
+                    ng-class="{'btn-primary': htmlAd.mraid}"
+                    ng-model="htmlAd.mraid"
+                    btn-checkbox
+                    btn-checkbox-true="true"
+                    btn-checkbox-false="false">
+                      MRAID
+                  </button>
+                </div>
+
+              </form>
+            </div>
+
+            <!-- // LIBRARY TEMPLATE -->
+            <!-- // LIBRARY TEMPLATE -->
+            <!-- // LIBRARY TEMPLATE -->
+            <div ng-switch-when="library">
+              <form role="form" class="library-form">
+                <h3>[Insert menu to choose an already-uploaded ad]</h3>
+              </form>
+            </div>
+
+            <!-- // PREVIEW IMAGE AD -->
+            <!-- // PREVIEW IMAGE AD -->
+            <!-- // PREVIEW IMAGE AD -->
+            <div ng-switch-when="previewAd">
+              <div class="text-center">
+                <img src="{{ asset_url }}" class="creative-preview" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left"
+            ng-if="getCurrentStepName() !== 'previewAd'"
+            ng-click="$hide(); clearAdFields()">Cancel
+          </button>
+
+          <button type="button" class="btn btn-default pull-right"
+            ng-if="getCurrentStepName() === 'previewAd'"
+            ng-click="$hide(); clearAdFields()">Close
+          </button>
+
+          <button type="button" class="btn btn-primary"
+            ng-if="getCurrentStepName() === 'uploadHTML'"
+            ng-click="uploadHtmlAd()">Next
+          </button>
+
+          <button type="button" class="btn btn-primary"
+            ng-if="getCurrentStepName() === 'library'"
+            ng-click="uploadFromLibrary()">Next
+          </button>
+
+          <button type="button" class="btn btn-primary"
+            ng-if="getCurrentStepName() === 'lineItemAdForm'"
+            ng-click="saveLineItemAd($hide)">Save
+          </button>
+
+          <button type="button" class="btn btn-primary"
+            ng-if="getCurrentStepName() === 'editAd'"
+            ng-click="updateLineItemAd($hide, lineItemAd)">Done
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<!-- <pre>{{ lineItemAds | json }}</pre> -->
+<!-- <pre>{{ lineItem | json }}</pre> -->

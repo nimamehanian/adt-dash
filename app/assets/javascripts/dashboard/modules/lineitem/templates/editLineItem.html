@@ -1,0 +1,406 @@
+<!-- Breadcrumbs -->
+<ul class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/campaigns">Campaigns</a></li>
+  <li><a href="/campaigns/{{ lineitem.campaign.id }}">{{ lineitem.campaign.name }}</a></li>
+  <li><a href="/line-items/{{ lineitem.id }}">{{ lineitem.name }}</a></li>
+  <li><a href="/line-items/{{ lineitem.id }}/edit">Edit</a></li>
+</ul>
+
+<form role="form" ng-submit="submit(lineitem)">
+  <div class="widget">
+    <legend>
+      <i class="icon-list-alt"></i>
+      Details
+    </legend>
+    <div class="widget-contents">
+      <div class="even-spread-container between-rows">
+
+        <!-- Line Item Name -->
+        <div class="form-group even-spread-sixths">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Line Item Name"
+            class="form-control"
+            tabindex="1"
+            ng-minlength="3"
+            ng-model="lineitem.name"
+            required
+          />
+        </div>
+
+        <!-- Date Range -->
+        <div class="form-group even-spread-sixths">
+          <label>Start Date</label>
+          <input
+            type="text"
+            placeholder="Start Date"
+            class="form-control"
+            tabindex="2"
+            datepicker-popup="EEEE, dd MMMM yyyy"
+            show-weeks="false"
+            min="today"
+            name="start_date"
+            ng-model="lineitem.start_date"
+            calendar-popup
+            required
+          />
+        </div>
+
+        <div class="form-group even-spread-sixths">
+          <label>End Date</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="End Date"
+            tabindex="3"
+            datepicker-popup="EEEE, dd MMMM yyyy"
+            show-weeks="false"
+            name="end_date"
+            ng-model="lineitem.end_date"
+            calendar-popup
+            required
+          />
+        </div>
+
+        <!-- Maximum CPM Bid -->
+        <div class="form-group even-spread-sixths">
+          <label>Max CPM Bid</label>
+          <input
+            type="number"
+            step="0.01"
+            name="max_cpm"
+            placeholder="Maximum CPM Bid"
+            class="form-control"
+            tabindex="4"
+            min="0"
+            ng-model="lineitem.max_cpm"
+            required
+          />
+        </div>
+
+        <!-- Cap Amount -->
+        <div class="form-group even-spread-sixths">
+          <label>Cap Amount</label>
+          <input
+            type="number"
+            name="freq_cap_amount"
+            placeholder="Cap Amount"
+            class="form-control"
+            tabindex="5"
+            min="0"
+            ng-model="lineitem.freq_cap_amount"
+          />
+        </div>
+
+        <!-- Cap Frequency -->
+        <div class="form-group even-spread-sixths">
+          <label>Cap Frequency</label><br />
+          <button
+            type="button"
+            placeholder="Cap Frequency"
+            class="btn btn-default dropdown-label"
+            tabindex="6"
+            data-html="1"
+            ng-model="lineitem.freq_cap_type"
+            ng-options="freqCapType.value as freqCapType.name for freqCapType in freqCapTypes"
+            data-animation="animation-flipX"
+            bs-select
+            > Action <span class="caret"></span>
+          </button>
+        </div>
+
+      </div>
+    </div><!-- Close .widget-contents -->
+  </div>
+
+  <!-- TV Targeting widget -->
+  <div class="widget">
+    <legend>
+      <i class="icon-play"></i>
+      TV Targeting
+    </legend>
+    <div class="widget-contents">
+      <div class="even-spread-container">
+        <div class="form-group">
+          <label>Strategy</label>
+          <button
+            type="button"
+            placeholder="TV Strategy"
+            class="btn btn-default match-width-select dropdown-label even-spread-quarters"
+            tabindex="7"
+            data-html="1"
+            ng-model="lineitem.tv_strategy"
+            ng-options="tvStrategy.value as tvStrategy.name for tvStrategy in tvStrategies"
+            data-animation="animation-flipX"
+            bs-select
+            > Action <span class="caret"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Targeting widget -->
+  <div class="widget">
+    <legend>
+      <i class="icon-bullseye"></i>
+      Targeting
+    </legend>
+    <div class="widget-contents">
+
+      <!-- App Names -->
+      <div class="even-spread-container">
+        <input
+          type="text"
+          name="target_app_names"
+          class="form-control even-spread-fifths"
+          tabindex="8"
+          placeholder="App Names"
+          disabled />
+
+        <!-- DMAs -->
+        <div class="input-group even-spread-fifths">
+          <input
+            type="text"
+            name="target_geo_dmas"
+            class="form-control"
+            tabindex="9"
+            placeholder="DMAs"
+            push-dma
+            ng-model="dma"
+            ng-options="dma.name as dma.name for dma in dmas"
+            bs-typeahead
+          />
+
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              <i class="icon-angle-down"></i>
+            </button>
+
+            <ul class="dma-dropdown dropdown-menu pull-right">
+              <li ng-if="!lineitem.target_geo_dmas.length" class="no-select">
+                <a href="#" class="text-center">No selected DMAs</a>
+              </li>
+
+              <li ng-if="lineitem.target_geo_dmas.length" class="no-select">
+                <a href="#" class="text-center">-- Selected DMAs --</a>
+              </li>
+
+              <li ng-if="lineitem.target_geo_dmas.length" class="no-select">
+                <a href="" class="text-center">
+                  <small>(click to remove)</small>
+                </a>
+              </li>
+
+              <li ng-if="lineitem.target_geo_dmas.length" class="divider"></li>
+
+              <li class="toggle" ng-repeat="dma in dmaDesc" ng-click="removeDMA(dma)">
+                <a href="#" class="remove-dma">
+                  {{ dma }}
+                  <i class="icon-remove opacity-70"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Time Zones -->
+        <button type="button" class="btn btn-default even-spread-fifths"
+          tabindex="10" data-html="1" multiple="1" placeholder="Time Zones"
+          ng-model="lineitem.target_geo_timezones"
+          ng-options="zone.value as zone.name for zone in timezones"
+          data-animation="animation-flipX"
+          template="select.tpl.html"
+          placement="bottom"
+          max-length="2"
+          bs-select
+          > Action <span class="caret"></span>
+        </button>
+
+
+        <!-- Operating Systems -->
+        <button type="button" class="btn btn-default even-spread-fifths"
+          tabindex="11" data-html="1" data-multiple="1" placeholder="Operating Systems"
+          ng-model="lineitem.target_device_oses"
+          ng-options="os.value as os.name for os in oses"
+          data-animation="animation-flipX"
+          template="select.tpl.html"
+          placement="bottom"
+          max-length="2"
+          bs-select
+          > Action <span class="caret"></span>
+        </button>
+
+        <!-- Dayparts (button) -->
+        <button type="button"
+          tabindex="12"
+          class="btn even-spread-fifths"
+          ng-class="{'btn-info': !toggleDayparts, 'btn-success': toggleDayparts}"
+          ng-click="toggleDayparts=!toggleDayparts">
+          <i class="icon-calendar"></i>
+          <span ng-if="!toggleDayparts">&nbsp; Dayparts</span>
+          <span ng-if="toggleDayparts">&nbsp; Confirm&nbsp;</span>
+          <i class="icon-chevron-down" ng-if="!toggleDayparts"
+             style="float: right; position: relative; top: 0.4rem;"></i>
+          <i class="icon-ok" ng-if="toggleDayparts"
+             style="float: right; position: relative; top: 0.4rem"></i>
+
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Dayparts (widget) -->
+  <div class="widget slide-down" ng-if="toggleDayparts">
+    <legend>
+      <i class="icon-calendar"></i>
+      Dayparts
+    </legend>
+    <div class="widget-contents">
+
+      <button type="button"
+        style="margin-left: 1rem;"
+        class="btn btn-danger pull-right"
+        ng-click="clear()">Clear
+      </button>
+
+      <!-- DP Time Zone -->
+      <button type="button"
+        class="btn btn-default pull-right"
+        data-html="1" placeholder="Time Zone"
+        placement="left"
+        ng-model="lineitem.target_dayparts.timezone"
+        ng-options="dpZone.value as dpZone.name for dpZone in dpZones"
+        ng-required
+        data-animation="animation-flipX"
+        bs-select
+        > Action <span class="caret"></span>
+      </button>
+
+      <div class="table-responsive">
+      <table class="dayparts table">
+        <thead>
+          <tr>
+            <th>
+
+            </th>
+            <th ng-repeat="hour in day">{{ hour.label }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Sunday -->
+          <tr>
+            <th colspan="2">Sunday</th>
+            <td ng-repeat="block in sunday"
+                ng-click="toggleSelect(block)"
+                ng-class="{selected: isSelected(block)}"
+                data-day="{{ block.day }}"
+                data-time="{{ block.time }}">
+                <i class="icon-ok icon-lg" ng-if="block.selected"></i>
+            </td>
+          </tr>
+
+          <!-- Monday -->
+          <tr>
+            <th colspan="2">Monday</th>
+            <td ng-repeat="block in monday"
+                ng-click="toggleSelect(block)"
+                ng-class="{selected: isSelected(block)}"
+                data-day="{{ block.day }}"
+                data-time="{{ block.time }}">
+                <i class="icon-ok icon-lg" ng-if="block.selected"></i>
+            </td>
+          </tr>
+
+          <!-- Tuesday -->
+          <tr>
+            <th colspan="2">Tuesday</th>
+            <td ng-repeat="block in tuesday"
+                ng-click="toggleSelect(block)"
+                ng-class="{selected: isSelected(block)}"
+                data-day="{{ block.day }}"
+                data-time="{{ block.time }}">
+                <i class="icon-ok icon-lg" ng-if="block.selected"></i>
+            </td>
+          </tr>
+
+          <!-- Wednesday -->
+          <tr>
+            <th colspan="2">Wednesday</th>
+            <td ng-repeat="block in wednesday"
+                ng-click="toggleSelect(block)"
+                ng-class="{selected: isSelected(block)}"
+                data-day="{{ block.day }}"
+                data-time="{{ block.time }}">
+                <i class="icon-ok icon-lg" ng-if="block.selected"></i>
+            </td>
+          </tr>
+
+          <!-- Thursday -->
+          <tr>
+            <th colspan="2">Thursday</th>
+            <td ng-repeat="block in thursday"
+                ng-click="toggleSelect(block)"
+                ng-class="{selected: isSelected(block)}"
+                data-day="{{ block.day }}"
+                data-time="{{ block.time }}">
+                <i class="icon-ok icon-lg" ng-if="block.selected"></i>
+            </td>
+          </tr>
+
+          <!-- Friday -->
+          <tr>
+            <th colspan="2">Friday</th>
+            <td ng-repeat="block in friday"
+                ng-click="toggleSelect(block)"
+                ng-class="{selected: isSelected(block)}"
+                data-day="{{ block.day }}"
+                data-time="{{ block.time }}">
+                <i class="icon-ok icon-lg" ng-if="block.selected"></i>
+            </td>
+          </tr>
+
+          <!-- Saturday -->
+          <tr>
+            <th colspan="2">Saturday</th>
+            <td ng-repeat="block in saturday"
+                ng-click="toggleSelect(block)"
+                ng-class="{selected: isSelected(block)}"
+                data-day="{{ block.day }}"
+                data-time="{{ block.time }}">
+                <i class="icon-ok icon-lg" ng-if="block.selected"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+
+  <div class="form-buttons">
+    <a href="/line-items/{{ lineitemId }}" class="btn btn-default" tabindex="16">
+      Cancel
+    </a>
+    <button type="submit" class="btn btn-primary" tabindex="17">
+      Update
+    </button>
+  </div>
+</form>
+
+<!-- ngStrap 'Select' template override -->
+<script type="text/ng-template" id="select.tpl.html">
+  <ul class="select dropdown-menu" ng-show="$isVisible()" role="select">
+    <li role="presentation" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}">
+      <a style="cursor: default;" role="menuitem" ng-click="$select($index, $event)">
+        <span ng-bind="match.label"></span>
+        <i class="icon-ok pull-right" ng-if="$isMultiple && $isActive($index)"></i>
+      </a>
+    </li>
+  </ul>
+</script>
+
+<!-- <pre>{{ lineitem | json }}</pre> -->

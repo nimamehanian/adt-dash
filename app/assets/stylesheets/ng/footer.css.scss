@@ -1,0 +1,32 @@
+button.btn-footer-left {
+  margin-right: 1rem;
+}
+
+button.btn-footer-right {
+  margin-left: 1rem;
+}
+
+button.btn-footer-left,
+button.btn-footer-right {
+  color: #eee;
+  border: 0.1rem solid #1b1f21;
+  border-radius: 0.2rem;
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.2), 0px 1px 3px rgba(0, 0, 0, 0.2);
+  font-weight: 200;
+  letter-spacing: 0.1rem;
+  position: relative;
+  top: 0.8rem;
+
+  background: #383e4b;
+  background: -moz-linear-gradient(100% 100% 90deg, #2c3134, #383e4b);
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#383e4b), to(#2c3134));
+  background: -o-linear-gradient(#383e4b, #2c3134);
+  background: -ms-linear-gradient(top, #383e4b 0%, #2c3134 100%);
+}
+
+button.btn-footer-left:hover,
+button.btn-footer-right:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#4a4e53), to(#3c3d42));
+  background: -o-linear-gradient(#4a4e53, #3c3d42);
+  background: -ms-linear-gradient(top, #4a4e53 0%, #3c3d42 100%);
+}

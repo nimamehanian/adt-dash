@@ -1,0 +1,31 @@
+/*
+ * CSS for the session views
+ */
+.controller-session {
+
+  #logo {
+    margin: 40px auto 40px auto;
+    text-align: center;
+
+    h1 {
+      margin: 0px auto;
+      height: 50px;
+      width: 205px;
+      overflow: hidden;
+    }
+    
+    h1 a {
+      background: image-url("adtonikLogo_color.png");
+      display: block;
+      height: 50px;
+      width: 205px;
+      
+      text-indent: -3000px;
+    }
+  }
+  
+  .login-page {
+    text-align: center;
+  }
+
+}

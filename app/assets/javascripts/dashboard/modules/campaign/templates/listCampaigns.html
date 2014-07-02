@@ -1,0 +1,55 @@
+<!-- Breadcrumbs -->
+<ul class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/campaigns">Campaigns</a></li>
+</ul>
+
+<div class="widget widget-table">
+  <legend>
+    <i class="icon-star-empty"></i>
+    Campaigns
+  </legend>
+  <div class="widget-contents">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="status-col">Status</th>
+            <th class="name-col-th text-left">Name</th>
+            <th class="text-left">Advertiser</th>
+            <th>Clicks</th>
+            <th>Impressions</th>
+            <th>CTR</th>
+            <th class="delete-col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="active toggle" adt-click="show(campaign)" ng-repeat="campaign in listCampaigns">
+            <td class="status-col"><div class="orb {{ campaign.status }}"></div></td>
+
+            <td class="text-left">{{ campaign.name }}</td>
+
+            <!-- <td class="name-col-td text-left">
+              <span class="name-span" adt-exempt>
+                <span
+                  ng-bind="campaign.name"
+                  editable-text="campaign.name"
+                  onaftersave="edit(campaign)"
+                ></span>
+              </span>
+            </td> -->
+
+            <td class="text-left">{{ campaign.advertiser.name }}</td>
+            <td>{{ campaign.clicks | commaSeparate }}</td>
+            <td>{{ campaign.imps | commaSeparate }} </td>
+            <td>{{ campaign.ctr }}</td>
+
+            <td class="delete-col">
+              <i class="icon-trash icon-large action-button remove" adt-exempt="remove(campaign)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

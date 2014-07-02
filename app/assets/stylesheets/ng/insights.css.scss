@@ -1,0 +1,41 @@
+.insights-chart {
+  height: 12rem;
+  max-height: 12rem !important;
+  width: auto;
+}
+
+.imp-group rect {
+  fill: $emerald;
+  color: #ccc;
+}
+
+.strata-title {
+  color: $burnt;
+  font-size: 1rem;
+}
+
+.strata {
+  font-size: 1rem;
+  letter-spacing: 0.1rem;
+  text-rendering: optimizeLegibility;
+}
+
+.ctr-group .ctr-under-control {
+  fill: #fff;
+  opacity: 0.7;
+}
+
+.ctr-group .ctr-over-control {
+  fill: $rose;
+}
+
+.control-line {
+  stroke: $royal;
+  stroke-width: 1;
+  stroke-dasharray: 5, 2;
+  shape-rendering: crispEdges;
+  fill: none;
+}
+
+/* TODO: Media Query */
+/* 1425px is min width to show insights widget */

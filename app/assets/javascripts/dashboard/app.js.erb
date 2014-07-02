@@ -1,0 +1,54 @@
+'use strict';
+Error.stackTraceLimit = Infinity;
+
+var app = angular.module('app', [
+  'ui.bootstrap',
+  'ngSanitize',
+  'ngAnimate',
+  'mgcrea.ngStrap',
+  'xeditable',
+  'ui.router',
+  'restangular',
+  'angularFileUpload',
+  'advertiser',
+  'campaign',
+  'lineitem',
+  'creative',
+  'sidebar',
+  'header',
+  'footer',
+  'library',
+  'analytics'
+]);
+
+<% if Rails.env.production? %>
+app.constant('baseUrl', 'https://api.adtonik.com');
+<% else %>
+app.constant('baseUrl', 'http://dev.adtonik.net:3001');
+<% end %>
+
+app.config(function (RestangularProvider, $httpProvider, baseUrl) {
+  var token = document.getElementById('token').getAttribute('value');
+  RestangularProvider.setBaseUrl(baseUrl);
+  RestangularProvider.setDefaultHeaders({'X-ADT-AUTH': token});
+  $httpProvider.defaults.headers.common['X-ADT-AUTH'] = token;
+});
+
+app.config(function ($sceProvider) {
+  $sceProvider.enabled(false);
+});
+
+app.run(function ($rootScope, $state, $stateParams, editableOptions, CampaignAPI, LineItemAPI) {
+  $rootScope.$stateParams = $stateParams;
+  $rootScope.$state = $state;
+
+  CampaignAPI._sync();
+  LineItemAPI._sync();
+
+  // X-Editable Theme
+  editableOptions.theme = 'bs3';
+
+  $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+    console.error('stateChangeError', arguments, error.stack);
+  });
+});
